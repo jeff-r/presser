@@ -2,9 +2,9 @@ require 'presser_yaml'
 require 'presser_opts'
 
 module Presser
-  describe PresserYaml do
+  describe PresserOpts do
 
-    it "should exist" do 
+    it "should restore from yaml string" do 
       opts = PresserOpts.from_yaml dummy_yaml
       puts opts.parsed.inspect
       opts.parsed.password.should eql("foo")
