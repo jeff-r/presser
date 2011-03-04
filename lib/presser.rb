@@ -31,12 +31,6 @@ module Presser
     def run
       rpc = PresserXmlrpc.new @opts
 
-      if @opts.pretend
-        puts "url: #{@opts.url}"
-        @opts.put_options
-        return
-      end
-
       if @opts.upload_file
         puts rpc.upload_file @opts.file_to_upload
         # puts rpc.file_type_from_name @opts.file_to_upload

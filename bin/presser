@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+require 'fileutils'
+
+$: << File.expand_path(File.dirname(__FILE__) + "/../lib")
 
 require "presser"
 
