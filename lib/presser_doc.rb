@@ -20,9 +20,9 @@ module Presser
       title.text       = @title
       link.text        = @link
 
-      str = ""
-      doc.write(str, 2)
-      puts str
+      # str = ""
+      # doc.write(str, 2)
+      # puts str
       str = ""
       doc.write str
       str

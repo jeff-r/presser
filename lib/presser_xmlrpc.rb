@@ -42,14 +42,14 @@ module Presser
       options = { :url => @opts.url, :method => "metaWeblog.getRecentPosts", 
                   :options => [blog_id, @opts.username, @opts.password] }
       result = call_xmlrpc options
-      puts result[0].inspect
+      # puts result[0].inspect
       result
     end
     def getPageList
       options = { :url => @opts.url, :method => "wp.getPageList", 
                   :options => [blog_id, @opts.username, @opts.password] }
       result = call_xmlrpc options
-      puts result.inspect
+      # puts result.inspect
       result
     end
 
@@ -66,7 +66,7 @@ module Presser
                   :options => [blog_id, @opts.username, @opts.password,
                   struct, publish] }
       result = call_xmlrpc options
-      puts result.inspect
+      # puts result.inspect
       result
     end
 
@@ -127,7 +127,7 @@ module Presser
                   :options => [blog_id, @opts.username, @opts.password,
                   struct, publish] }
       result = call_xmlrpc options
-      puts result.inspect
+      # puts result.inspect
       result
     end
 

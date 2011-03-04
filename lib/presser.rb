@@ -23,7 +23,7 @@ module Presser
     def do_getPostStatus
       rpc = PresserXmlrpc.new @opts
       result = rpc.call_xmlrpc rpc.options_for_getPostStatus
-      puts result.inspect
+      # puts result.inspect
       result
     end
 
