@@ -25,29 +25,29 @@ module Presser
 
     def getUsersBlogs
       options = { :url => @opts.url, :method => "wp.getUsersBlogs", 
-                  :options => [@opts.username, @opts.password] }
+                  :options => [@opt.username, @opt.password] }
       call_xmlrpc options
     end
     def getPostStatusList
-      options = { :url => @opts.url, :method => "wp.getPostStatusList", 
-                  :options => [blog_id, @opts.username, @opts.password] }
+      options = { :url => @opt.url, :method => "wp.getPostStatusList", 
+                  :options => [blog_id, @opt.username, @opt.password] }
       call_xmlrpc options
     end
     def getTags
-      options = { :url => @opts.url, :method => "wp.getTags", 
-                  :options => [blog_id, @opts.username, @opts.password] }
+      options = { :url => @opt.url, :method => "wp.getTags", 
+                  :options => [blog_id, @opt.username, @opt.password] }
       call_xmlrpc options
     end
     def getRecentPosts
-      options = { :url => @opts.url, :method => "metaWeblog.getRecentPosts", 
-                  :options => [blog_id, @opts.username, @opts.password] }
+      options = { :url => @opt.url, :method => "metaWeblog.getRecentPosts", 
+                  :options => [blog_id, @opt.username, @opt.password] }
       result = call_xmlrpc options
       # puts result[0].inspect
       result
     end
     def getPageList
-      options = { :url => @opts.url, :method => "wp.getPageList", 
-                  :options => [blog_id, @opts.username, @opts.password] }
+      options = { :url => @opt.url, :method => "wp.getPageList", 
+                  :options => [blog_id, @opt.username, @opt.password] }
       result = call_xmlrpc options
       # puts result.inspect
       result
@@ -62,8 +62,8 @@ module Presser
             "description" => "the floral description"
             }
       publish = true
-      options = { :url => @opts.url, :method => "metaWeblog.newPost", 
-                  :options => [blog_id, @opts.username, @opts.password,
+      options = { :url => @opt.url, :method => "metaWeblog.newPost", 
+                  :options => [blog_id, @opt.username, @opt.password,
                   struct, publish] }
       result = call_xmlrpc options
       # puts result.inspect
@@ -77,8 +77,8 @@ module Presser
             "bits" => encode64(filename),
             "overwrite" => false
             }
-      options = { :url => @opts.url, :method => "wp.uploadFile", 
-                  :options => [blog_id, @opts.username, @opts.password, struct] }
+      options = { :url => @opt.url, :method => "wp.uploadFile", 
+                  :options => [blog_id, @opt.username, @opt.password, struct] }
       result = call_xmlrpc options
       result = result["url"]
     end
@@ -123,8 +123,8 @@ module Presser
             "description" => bp.body
             }
       publish = true
-      options = { :url => @opts.url, :method => "metaWeblog.newPost", 
-                  :options => [blog_id, @opts.username, @opts.password,
+      options = { :url => @opt.url, :method => "metaWeblog.newPost", 
+                  :options => [blog_id, @opt.username, @opt.password,
                   struct, publish] }
       result = call_xmlrpc options
       # puts result.inspect

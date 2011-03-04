@@ -8,12 +8,13 @@ module Presser
 
   class Presser
     def initialize(args)
-      @opts = PresserOpts.parse(args)
+      @options = PresserOpts.new args
+      @presserOpts = PresserOpts.new args
       self
     end
 
-    def options
-      @opts
+    def parsed_options
+      @options.parsed
     end
 
     def response
@@ -21,7 +22,7 @@ module Presser
     end
 
     def do_getPostStatus
-      rpc = PresserXmlrpc.new @opts
+      rpc = PresserXmlrpc.new parsed
       result = rpc.call_xmlrpc rpc.options_for_getPostStatus
       # puts result.inspect
       result
@@ -29,17 +30,23 @@ module Presser
 
 
     def run
-      rpc = PresserXmlrpc.new @opts
+      rpc = PresserXmlrpc.new parsed
 
-      if @opts.upload_file
-        puts rpc.upload_file @opts.file_to_upload
-        # puts rpc.file_type_from_name @opts.file_to_upload
+      if @options.parsed.upload_file
+        puts rpc.upload_file @options.parsed.file_to_upload
+        # puts rpc.file_type_from_name @options.parsed.file_to_upload
       end
 
-      if @opts.post_file
-        puts rpc.post_file @opts.file_to_post
+      if @options.parsed.post_file
+        puts rpc.post_file @options.parsed.file_to_post
       end
 
+      if @options.make_config_file
+        puts @presserOpts.create_config_file
+      end
+
+        options.make_config_file = true
+        options.config_file_name = filename.strip
     end
 
   end

@@ -1,12 +1,27 @@
 require 'optparse'
 require 'ostruct'
 
+module Presser
 class PresserOpts
   ConfigFile = "~/.presser"
 
   def initialize(args, path=PresserOpts::ConfigFile)
     @config_file_path = path
-    @options = PresserOpts.parse(args)
+    @parsed = parse(args)
+  end
+
+  def self.from_yaml yaml_string
+    new_opts = PresserOpts.new []
+    new_opts.parsed = OpenStruct.new YAML::load(yaml_string)["table"]
+    new_opts
+  end
+
+  def parsed= val
+    @parsed = val
+  end
+
+  def parsed
+    @parsed
   end
 
   # if the specified file doesn't exist, create it
@@ -19,24 +34,26 @@ class PresserOpts
 
   def config_file_contents
     str = ""
-    str << "username: #{@options.username}\n"
-    str << "password: #{@options.password}\n"
-    str << "url: #{@options.url}"
+    str << "username: #{@parsed.username}\n"
+    str << "password: #{@parsed.password}\n"
+    str << "url: #{@parsed.url}"
   end
 
-  def self.parse(args)
-    options = OpenStruct.new
-    options.verbose        = false
-    options.username       = "WaltKelly"
-    options.password       = "pogo"
-    options.url            = ""
-    options.file_to_upload = ""
-    options.upload_file    = false
-    options.pretend        = false
-    options.post_file      = false
-    options.file_to_post   = ""
+  def parse(args)
+    parsed = OpenStruct.new
+    parsed.verbose          = false
+    parsed.username         = "WaltKelly"
+    parsed.password         = "pogo"
+    parsed.url              = "http://wordpress/wp/xmlrpc.php"
+    parsed.file_to_upload   = ""
+    parsed.upload_file      = false
+    parsed.pretend          = false
+    parsed.post_file        = false
+    parsed.file_to_post     = ""
+    parsed.make_config_file = false
+    parsed.config_file_name = "~/.presser"
 
-    @opts = OptionParser.new do |opts|
+    @optionParser = OptionParser.new do |opts|
       opts.banner = "Usage: presser [options]"
       # opts.separator = ""
 
@@ -44,35 +61,40 @@ class PresserOpts
         puts opts
       end
 
+      opts.on("-c", "--configfile [STRING]", "create a config file") do |filename|
+        parsed.make_config_file = true
+        parsed.config_file_name = filename.strip
+      end
+
       opts.on("-o", "--post STRING", "Post the named file") do |filename|
-        options.post_file    = true
-        options.file_to_post = filename.strip
+        parsed.post_file    = true
+        parsed.file_to_post = filename.strip
       end
 
       opts.on('-p', '--password STRING', 'WordPress admin password') do |password|
-        options.password = password.strip
+        parsed.password = password.strip
       end
       opts.on('-u', '--username STRING', 'WordPress admin username') do |username|
-        options.username = username.strip
+        parsed.username = username.strip
       end
       opts.on('--upload STRING', '-U', 'Upload a file') do |filename|
-        options.upload_file    = true
-        options.file_to_upload = filename.strip
+        parsed.upload_file    = true
+        parsed.file_to_upload = filename.strip
       end
       opts.on('--url STRING', '-U STRING', 'WordPress xmlrpc url') do |url|
-        options.url = url.strip
+        parsed.url = url.strip
       end
 
       # opts.on("-v", "--verbose", "Print out verbose messages") do |verb|
-      #   options.verbose = true
+      #   parsed.verbose = true
       # end
 
     end
 
-    @opts.parse!(args)
-    options
+    @optionParser.parse!(args)
+    parsed
   end
 
 
 end
-
+end

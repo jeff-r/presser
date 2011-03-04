@@ -5,7 +5,7 @@ require_relative 'dont_git_this'
 describe "Presser net access" do
   before(:each) do
     @pr  = Presser::Presser.new(["-u #{Presser::NoGit.username}", "-p #{Presser::NoGit.password}"])
-    @rpc = Presser::PresserXmlrpc.new @pr.options
+    @rpc = Presser::PresserXmlrpc.new @pr.parsed_options
   end
 
   it "should be an xmlrpc client" do
@@ -14,7 +14,7 @@ describe "Presser net access" do
     #   @rpc.getTags.length.should eql(0)
     #   @rpc.getPageList.length.should eql(1)
     #   @rpc.getRecentPosts.length.should eql(2)
-    @rpc.newPost
+#    @rpc.newPost
   end
 end
 
