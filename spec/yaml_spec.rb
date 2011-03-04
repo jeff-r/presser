@@ -14,6 +14,10 @@ module Presser
       opts.to_yaml.should eql(dummy_yaml)
     end
 
+    it "should save the config to a file" do
+
+    end
+
     def dummy_yaml
       %Q{verbose: false
 username: WaltKelly
@@ -25,7 +29,7 @@ pretend: false
 post_file: false
 file_to_post: 
 make_config_file: false
-config_file_name: ~/.presser
+config_file_name: temp_config_file.txt
 }
     end
 

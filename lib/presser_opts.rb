@@ -18,9 +18,7 @@ class PresserOpts
   end
 
   def to_yaml
-    # str =  "table:\n"
-    str =  ""
-    str << "verbose: #{parsed.verbose}\n"
+    str =  "verbose: #{parsed.verbose}\n"
     str << "username: #{parsed.username}\n"
     str << "password: #{parsed.password}\n"
     str << "url: #{parsed.url}\n"
