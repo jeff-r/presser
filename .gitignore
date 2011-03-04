@@ -3,3 +3,4 @@
 Gemfile.lock
 pkg/*
 test/dont_git*
+presser_config_file.yml

@@ -6,7 +6,7 @@ namespace :specs do
 
   desc "Run all specs"
   task :all do |t|
-    sh "rspec spec/*.rb"
+    sh "#{Rspec} spec/*.rb"
   end
 
   desc "Run doc specs"

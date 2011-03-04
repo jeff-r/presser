@@ -13,7 +13,7 @@ of the file.
 This is [a link](http://www.google.com).
     }
     lines = txt.split("\n")
-    puts lines.inspect
+    # puts lines.inspect
     # Make sure that posting increases the line count
     # Parse the returned string, and get the post id
   end

@@ -1,11 +1,15 @@
-require 'presser_yaml'
 require 'presser_opts'
 
 module Presser
   describe PresserOpts do
 
     before(:each) do 
+      `rm -f #{test_config_file}`
       @opts = PresserOpts.from_yaml dummy_yaml
+    end
+
+    after(:each) do
+      `rm -f #{test_config_file}`
     end
 
     it "should restore from yaml string" do 
@@ -16,7 +20,6 @@ module Presser
     end
 
     it "should save the config to a file" do
-      `rm -f #{test_config_file}`
 
       @opts.parsed.config_file_name.should eql(test_config_file)
       File.exists?(@opts.parsed.config_file_name).should be_false
@@ -27,7 +30,6 @@ module Presser
     end
 
     it "should load from a config file" do
-      `rm -f #{test_config_file}`
       @opts.save_to_file
       opts2 = PresserOpts.from_file test_config_file
 

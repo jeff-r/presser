@@ -7,11 +7,21 @@ require 'fileutils'
 module Presser
 
   class Presser
-    def initialize(args)
-      @options = PresserOpts.new args
-      @presserOpts = PresserOpts.new args
+    def initialize(args, filename=nil)
+      if filename
+        @options = PresserOpts.from_file filename
+        @options.parse args
+      else
+        @options = PresserOpts.new args
+      end
+
       self
     end
+
+    # def self.from_file filename
+    #   newpresser = Presser.new
+    #   
+    # end
 
     def parsed_options
       @options.parsed
@@ -24,7 +34,6 @@ module Presser
     def do_getPostStatus
       rpc = PresserXmlrpc.new parsed
       result = rpc.call_xmlrpc rpc.options_for_getPostStatus
-      # puts result.inspect
       result
     end
 
@@ -42,11 +51,8 @@ module Presser
       end
 
       if @options.make_config_file
-        puts @presserOpts.save_to_file
+        puts @options.save_to_file
       end
-
-        options.make_config_file = true
-        options.config_file_name = filename.strip
     end
 
   end
