@@ -1,5 +1,6 @@
 require 'optparse'
 require 'ostruct'
+require 'yaml'
 
 module Presser
 class PresserOpts
@@ -12,8 +13,25 @@ class PresserOpts
 
   def self.from_yaml yaml_string
     new_opts = PresserOpts.new []
-    new_opts.parsed = OpenStruct.new YAML::load(yaml_string)["table"]
+    new_opts.parsed = OpenStruct.new YAML::load(yaml_string)
     new_opts
+  end
+
+  def to_yaml
+    # str =  "table:\n"
+    str =  ""
+    str << "verbose: #{parsed.verbose}\n"
+    str << "username: #{parsed.username}\n"
+    str << "password: #{parsed.password}\n"
+    str << "url: #{parsed.url}\n"
+    str << "file_to_upload: #{parsed.file_to_upload}\n"
+    str << "upload_file: #{parsed.upload_file}\n"
+    str << "pretend: #{parsed.pretend}\n"
+    str << "post_file: #{parsed.post_file}\n"
+    str << "file_to_post: #{parsed.file_to_post}\n"
+    str << "make_config_file: #{parsed.make_config_file}\n"
+    str << "config_file_name: #{parsed.config_file_name}\n"
+    str
   end
 
   def parsed= val
