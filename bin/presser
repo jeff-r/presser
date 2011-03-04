@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require "presser"
+
+
+wp = Presser::Presser.new ARGV
+wp.run
