@@ -21,14 +21,6 @@ describe "Presser defaults" do
     @pr.parsed_options.url = "http://wordpress/wp/xmlrpc.php"
   end
 
-  it "should create a .presser file if non exist" do
-    File.exists?(@config_filename).should be_false
-    opts = Presser::PresserOpts.new([], @config_filename)
-    opts.create_config_file 
-    File.exists?(@config_filename).should be_true
-    `rm -f #{@config_filename}`
-  end
-
   it "should generate the correct options string for the config file" do
     argv = ["-u    #{Presser::NoGit.username}", 
             "-p    #{Presser::NoGit.password}", 

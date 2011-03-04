@@ -42,7 +42,7 @@ module Presser
       end
 
       if @options.make_config_file
-        puts @presserOpts.create_config_file
+        puts @presserOpts.save_to_file
       end
 
         options.make_config_file = true

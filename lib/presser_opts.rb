@@ -7,13 +7,14 @@ class PresserOpts
   ConfigFile = "~/.presser"
 
   def initialize(args, path=PresserOpts::ConfigFile)
-    @config_file_path = path
     @parsed = parse(args)
+    @parsed.config_file_name = path
   end
 
   def self.from_yaml yaml_string
     new_opts = PresserOpts.new []
     new_opts.parsed = OpenStruct.new YAML::load(yaml_string)
+    # puts "**** from_yaml: new_opts: #{new_opts.inspect}"
     new_opts
   end
 
@@ -40,12 +41,15 @@ class PresserOpts
     @parsed
   end
 
-  # if the specified file doesn't exist, create it
-  # Specify it here as an optional parameter so we can
-  # give it a temp file for testing
-  def create_config_file
-    puts "'#{@config_file_path}'"
-    `touch #{@config_file_path}`
+  def save_to_file
+    File.open(@parsed.config_file_name, 'w') do |file|
+      file.puts to_yaml
+    end
+  end
+
+  def self.from_file filename
+    yaml = File.new(filename).read
+    PresserOpts.from_yaml yaml
   end
 
   def config_file_contents
