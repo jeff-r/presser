@@ -2,6 +2,16 @@ require 'optparse'
 require 'ostruct'
 require 'yaml'
 
+# Usage: presser [options]
+#    -h, --help                       Print out this message
+#    -c, --configfile [STRING]        create a config file
+#    -o, --post STRING                Post the named file
+#    -p, --password STRING            WordPress admin password
+#    -u, --username STRING            WordPress admin username
+#    -U, --upload STRING              Upload a file
+#    -r, --url STRING                 WordPress xmlrpc url
+
+
 module Presser
 class PresserOpts
   ConfigFile = "~/.presser"
@@ -96,11 +106,11 @@ class PresserOpts
       opts.on('-u', '--username STRING', 'WordPress admin username') do |username|
         @parsed.username = username.strip
       end
-      opts.on('--upload STRING', '-U', 'Upload a file') do |filename|
+      opts.on('-U', '--upload STRING', 'Upload a file') do |filename|
         @parsed.upload_file    = true
         @parsed.file_to_upload = filename.strip
       end
-      opts.on('-U STRING', '--url STRING', 'WordPress xmlrpc url') do |url|
+      opts.on('-r STRING', '--url STRING', 'WordPress xmlrpc url') do |url|
         @parsed.url = url.strip
       end
 

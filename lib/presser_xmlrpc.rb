@@ -7,7 +7,7 @@ module Presser
   class PresserXmlrpc
 
     def initialize(opts)
-      @opts = opts
+      @opt = opts
     end
 
     def call_xmlrpc(opts)
@@ -24,7 +24,7 @@ module Presser
     end
 
     def getUsersBlogs
-      options = { :url => @opts.url, :method => "wp.getUsersBlogs", 
+      options = { :url => @opt.url, :method => "wp.getUsersBlogs", 
                   :options => [@opt.username, @opt.password] }
       call_xmlrpc options
     end
@@ -48,23 +48,6 @@ module Presser
     def getPageList
       options = { :url => @opt.url, :method => "wp.getPageList", 
                   :options => [blog_id, @opt.username, @opt.password] }
-      result = call_xmlrpc options
-      # puts result.inspect
-      result
-    end
-
-    def newPost
-      doc = PresserDoc.new
-      struct = doc.new_doc
-      struct = { 
-            "title" => "the shiny new title",
-            "link"  => "the missing link",
-            "description" => "the floral description"
-            }
-      publish = true
-      options = { :url => @opt.url, :method => "metaWeblog.newPost", 
-                  :options => [blog_id, @opt.username, @opt.password,
-                  struct, publish] }
       result = call_xmlrpc options
       # puts result.inspect
       result
@@ -112,23 +95,19 @@ module Presser
       XMLRPC::Base64.new(File.open(filename).read)
     end
 
-    def post_file filename
+    def post_file(filename, publish = true)
       bp = BlogPost.from_filename filename
-
-      # puts "bp: #{bp.dumpself}"
 
       struct = { 
             "title" => bp.title,
             "link"  => "the missing link",
             "description" => bp.body
             }
-      publish = true
       options = { :url => @opt.url, :method => "metaWeblog.newPost", 
                   :options => [blog_id, @opt.username, @opt.password,
                   struct, publish] }
-      result = call_xmlrpc options
-      # puts result.inspect
-      result
+      postid = call_xmlrpc options
+      postid
     end
 
   end
