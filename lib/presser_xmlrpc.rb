@@ -1,6 +1,7 @@
 require 'xmlrpc/client'
 require_relative 'local_file'
 require_relative 'blog_post'
+require 'presser_doc'
 
 module Presser
 
@@ -11,7 +12,7 @@ module Presser
     end
 
     def call_xmlrpc(opts)
-      # puts "opts: #{opts.inspect}"
+      # puts "call_xmlrpc: opts = #{opts}"
       server = XMLRPC::Client.new2(opts[:url])
       result = server.call(opts[:method], opts[:options])
     end
@@ -19,7 +20,6 @@ module Presser
     def blog_id
       # Return the id for the first blog
       @blogid ||= getUsersBlogs[0]["blogid"]
-      # puts "Blogid = #{@blogid}"
       @blogid
     end
 
@@ -42,14 +42,12 @@ module Presser
       options = { :url => @opt.url, :method => "metaWeblog.getRecentPosts", 
                   :options => [blog_id, @opt.username, @opt.password] }
       result = call_xmlrpc options
-      # puts result[0].inspect
       result
     end
     def getPageList
       options = { :url => @opt.url, :method => "wp.getPageList", 
                   :options => [blog_id, @opt.username, @opt.password] }
       result = call_xmlrpc options
-      # puts result.inspect
       result
     end
 
@@ -99,17 +97,76 @@ module Presser
       bp = BlogPost.from_filename filename
 
       struct = { 
-            "title" => bp.title,
-            "link"  => "the missing link",
+            "title"       => bp.title,
+            "link"        => bp.link,
+            "categories"  => bp.categories,
+      #      "postid"      => bp.postid,
+            "post_status" => bp.post_status,
             "description" => bp.body
             }
-      options = { :url => @opt.url, :method => "metaWeblog.newPost", 
-                  :options => [blog_id, @opt.username, @opt.password,
-                  struct, publish] }
+      if bp.postid == ""
+        options = { :url => @opt.url, :method => "metaWeblog.newPost", 
+                    :options => [blog_id, @opt.username, @opt.password,
+                    struct, publish] }
+      else
+        struct["postid"] = bp.postid
+        options = { :url => @opt.url, :method => "metaWeblog.editPost", 
+                    :options => [blog_id, @opt.username, @opt.password,
+                    struct, publish] }
+      end
       postid = call_xmlrpc options
       postid
     end
 
+    # This returns a PresserDoc with the post contents
+    # I've put a sample of the struct returned by wordpress at the end of this file
+    def get_post(postid)
+      options = { :url => @opt.url, :method => "metaWeblog.getPost", 
+                  :options => [postid, @opt.username, @opt.password] }
+      
+      struct = call_xmlrpc options
+      doc = PresserDoc.new struct["title"], struct["link"], struct["description"]
+      doc.categories  = struct["categories"]
+      doc.postid      = struct["postid"]
+      doc.post_status = struct["post_status"]
+      doc
+    end
+
+    def delete_post(postid)
+      options = { :url => @opt.url, :method => "blogger.deletePost", 
+                  :options => ["", postid, @opt.username, @opt.password, ""] }
+      
+      result = call_xmlrpc options
+      result
+    end
+
   end
 end
+
+# Struct returned by metaWeblog.getPost:
+#  {
+#    "dateCreated"=>#<XMLRPC::DateTime:0x00000100d96d80 @year=2011, @month=3, @day=5, @hour=2, @min=40, @sec=4>, 
+#    "userid"=>"1", 
+#    "postid"=>119, 
+#    "description"=>"This is the body\nof the file.\n\nThis is [a link](http://www.google.com).", 
+#    "title"=>"Put your title here", 
+#    "link"=>"http://wordpress/wp/?p=119", 
+#    "permaLink"=>"http://wordpress/wp/?p=119", 
+#    "categories"=>["Uncategorized"], 
+#    "mt_excerpt"=>"", 
+#    "mt_text_more"=>"", 
+#    "mt_allow_comments"=>1, 
+#    "mt_allow_pings"=>1, 
+#    "mt_keywords"=>"", 
+#    "wp_slug"=>"put-your-title-here-7", 
+#    "wp_password"=>"", 
+#    "wp_author_id"=>"1", 
+#    "wp_author_display_name"=>"jeff", 
+#    "date_created_gmt"=>#<XMLRPC::DateTime:0x00000100db5ac8 @year=2011, @month=3, @day=5, @hour=2, @min=40, @sec=4>, 
+#    "post_status"=>"publish", 
+#    "custom_fields"=>[{"id"=>"180", "key"=>"_encloseme", "value"=>"1"}], 
+#    "wp_post_format"=>"standard", 
+#    "sticky"=>false
+#  }
+# 
 

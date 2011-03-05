@@ -7,11 +7,11 @@ module Presser
       @body = ""
       @filename = filename
       @params = {}
-      get_header
+      parse_all_lines
       # puts "The title: #{@title}"
     end
 
-    def get_header 
+    def parse_all_lines
       File.readlines(@filename).each do |line|
         line = line.strip
         if @in_header

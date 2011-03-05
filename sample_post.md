@@ -1,9 +1,0 @@
-# Beginning of header
-title: Put your title here
-# End of header
-
-This is the body
-of the file.
-
-This is [a link](http://www.google.com).
-    

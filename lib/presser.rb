@@ -32,12 +32,21 @@ module Presser
       result
     end
 
+    def get_post postid
+      rpc = PresserXmlrpc.new @options.parsed
+      struct = rpc.get_post postid
+    end
+
+    def delete_post postid
+      rpc = PresserXmlrpc.new @options.parsed
+      rpc.delete_post postid
+    end
 
     def run
       rpc = PresserXmlrpc.new @options.parsed
 
       if @options.parsed.upload_file
-        puts "Upload: #{@options.parsed.inspect}"
+        # puts "Upload: #{@options.parsed.inspect}"
         puts rpc.upload_file @options.parsed.file_to_upload
         # puts rpc.file_type_from_name @options.parsed.file_to_upload
       end
@@ -46,13 +55,19 @@ module Presser
         filename = @options.parsed.file_to_post
 
         postid = rpc.post_file filename
-       # rpc.save_post_to_file postid, filename
+        struct = rpc.get_post postid
+
+        File.open(filename, "w") { |file| file.puts struct.to_s }
 
         puts postid
       end
 
       if @options.parsed.make_config_file
         puts @options.save_to_file
+      end
+
+      if @options.parsed.delete_post
+        delete_post @options.parsed.postid
       end
     end
 

@@ -5,6 +5,8 @@ require 'yaml'
 # Usage: presser [options]
 #    -h, --help                       Print out this message
 #    -c, --configfile [STRING]        create a config file
+#    -d, --deletepost INTEGER         delete a post
+#    -g, --getpost INTEGER            delete a post
 #    -o, --post STRING                Post the named file
 #    -p, --password STRING            WordPress admin password
 #    -u, --username STRING            WordPress admin username
@@ -81,6 +83,9 @@ class PresserOpts
     @parsed.file_to_post     ||= ""
     @parsed.make_config_file ||= false
     @parsed.config_file_name ||= "~/.presser"
+    @parsed.delete_post      ||= false
+    @parsed.get_post         ||= false
+    @parsed.postid   ||= ""
 
     @optionParser = OptionParser.new do |opts|
       opts.banner = "Usage: presser [options]"
@@ -93,6 +98,16 @@ class PresserOpts
       opts.on("-c", "--configfile [STRING]", "create a config file") do |filename|
         @parsed.make_config_file = true
         @parsed.config_file_name = filename.strip
+      end
+
+       opts.on("-d", "--deletepost INTEGER", "delete a post") do |postid|
+        @parsed.delete_post    = true
+        @parsed.postid = postid
+      end
+
+       opts.on("-g", "--getpost INTEGER", "delete a post") do |postid|
+        @parsed.get_post    = true
+        @parsed.postid = postid
       end
 
       opts.on("-o", "--post STRING", "Post the named file") do |filename|
