@@ -1,8 +1,9 @@
 # Beginning of header
-title: Put your title here
+title:  A new title
+link:   http://wordpress/wp/?p=216
+postid: 216
+post_status: publish
 # End of header
-
-
 This is the body
 of the file.
 

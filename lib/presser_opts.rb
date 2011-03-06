@@ -16,18 +16,21 @@ require 'yaml'
 
 module Presser
 class PresserOpts
-  ConfigFile = "~/.presser"
-
-  def initialize(args, path=PresserOpts::ConfigFile)
+  def initialize(args, path="")
     @parsed = OpenStruct.new
     parse(args)
-    @parsed.config_file_name = path
+    if not path == ""
+      @parsed.config_file_name = path
+    end
   end
 
-  def self.from_yaml yaml_string
-    new_opts = PresserOpts.new []
-    new_opts.parsed = OpenStruct.new YAML::load(yaml_string)
-    new_opts
+  def load_yaml yaml_string
+    # new_opts = PresserOpts.new []
+    yaml = YAML::load(yaml_string)
+
+    @parsed.username         = yaml["username"]
+    @parsed.password         = yaml["password"]
+    @parsed.url              = yaml["url"]
   end
 
   def to_yaml
@@ -45,6 +48,10 @@ class PresserOpts
     str
   end
 
+  def config_file_name= filename
+    @parsed.config_file_name = filename
+  end
+
   def parsed= val
     @parsed = val
   end
@@ -54,14 +61,14 @@ class PresserOpts
   end
 
   def save_to_file
-    File.open(@parsed.config_file_name, 'w') do |file|
+    File.open(@parsed.config_file_name, 'w+') do |file|
       file.puts to_yaml
     end
   end
 
-  def self.from_file filename
+  def load_file filename
     yaml = File.new(filename).read
-    PresserOpts.from_yaml yaml
+    load_yaml yaml
   end
 
   def config_file_contents
@@ -82,10 +89,12 @@ class PresserOpts
     @parsed.post_file        ||= false
     @parsed.file_to_post     ||= ""
     @parsed.make_config_file ||= false
-    @parsed.config_file_name ||= "~/.presser"
+    @parsed.use_config_file  ||= true
+    @parsed.config_file_name ||= "#{ENV['HOME']}/.presser"
     @parsed.delete_post      ||= false
     @parsed.get_post         ||= false
-    @parsed.postid   ||= ""
+    @parsed.postid           ||= ""
+    @parsed.show_config      ||= false
 
     @optionParser = OptionParser.new do |opts|
       opts.banner = "Usage: presser [options]"
@@ -97,15 +106,24 @@ class PresserOpts
 
       opts.on("-c", "--configfile [STRING]", "create a config file") do |filename|
         @parsed.make_config_file = true
-        @parsed.config_file_name = filename.strip
+        if filename
+          @parsed.config_file_name = filename.strip
+        end
       end
 
-       opts.on("-d", "--deletepost INTEGER", "delete a post") do |postid|
+      opts.on("-d", "--deletepost INTEGER", "delete a post") do |postid|
         @parsed.delete_post    = true
         @parsed.postid = postid
       end
 
-       opts.on("-g", "--getpost INTEGER", "delete a post") do |postid|
+      opts.on("-f", "--useconfigfile [STRING]", "use a config file") do |filename|
+        @parsed.use_config_file = true
+        if filename
+          @parsed.config_file_name = filename.strip
+        end
+      end
+
+      opts.on("-g", "--getpost INTEGER", "delete a post") do |postid|
         @parsed.get_post    = true
         @parsed.postid = postid
       end
@@ -115,6 +133,11 @@ class PresserOpts
         @parsed.file_to_post = filename.strip
       end
 
+      opts.on('-s', '--show', 'Show the current configuration') do |password|
+        puts "PresserOpts: show config is true"
+        @parsed.show_config = true
+      end
+      
       opts.on('-p', '--password STRING', 'WordPress admin password') do |password|
         @parsed.password = password.strip
       end

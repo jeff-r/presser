@@ -1,0 +1,11 @@
+verbose: false
+username: WaltKelly
+password: pogo
+url: http://wordpress/wp/xmlrpc.php
+file_to_upload: 
+upload_file: false
+pretend: false
+post_file: false
+file_to_post: 
+make_config_file: true
+config_file_name: .presser

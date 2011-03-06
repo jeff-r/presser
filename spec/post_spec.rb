@@ -58,6 +58,12 @@ describe BlogPost do
     null_post.should be_nil
   end
 
+  it "should read the config file correctly" do
+    make_sample_file
+    presser = Presser.new ["-o #{sample_post_filename}"], config_file_name
+    presser.parsed_options.username.should eql("jeff")
+  end
+
   it "should create a new post for a new file" 
 
   def make_sample_file

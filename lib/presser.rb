@@ -7,15 +7,21 @@ require 'fileutils'
 module Presser
 
   class Presser
+    CONFIGFILE = "#{ENV['HOME']}/.presser"
     def initialize(args, filename=nil)
-      if filename
-        @options = PresserOpts.from_file filename
-        @options.parse args
-      else
-        @options = PresserOpts.new args
-      end
+      @args = args
 
-      self
+      filename ||= CONFIGFILE
+      load_config_file filename
+    end
+
+    def load_config_file filename
+      @options = PresserOpts.new Array.new @args
+      if File.exists? filename
+        @options.load_file filename
+      #  @options.parse Array.new @args
+      end
+      @options
     end
 
     def parsed_options
@@ -43,12 +49,15 @@ module Presser
     end
 
     def run
+
+      # if @options.parsed.use_config_file
+      #   load_config_file @options.parsed.config_file_name
+      # end
+
       rpc = PresserXmlrpc.new @options.parsed
 
       if @options.parsed.upload_file
-        # puts "Upload: #{@options.parsed.inspect}"
         puts rpc.upload_file @options.parsed.file_to_upload
-        # puts rpc.file_type_from_name @options.parsed.file_to_upload
       end
 
       if @options.parsed.post_file
@@ -68,6 +77,10 @@ module Presser
 
       if @options.parsed.delete_post
         delete_post @options.parsed.postid
+      end
+
+      if @options.parsed.show_config
+        puts @options.to_yaml
       end
     end
 
