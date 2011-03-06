@@ -64,11 +64,22 @@ module Presser
         filename = @options.parsed.file_to_post
 
         postid = rpc.post_file filename
-        struct = rpc.get_post postid
+        # When doing a new pots, we want to get the info after
+        # WP creates the post ... mostly, we want to put the
+        # postid into our local source file.
+        # The get_post call throws an exception if we're
+        # just updating a post, rather than doing a new post.
+        # But in that case, we don't need to get the post id,
+        # so we can safely ignore the exception.
+        begin
+          struct = rpc.get_post postid
+          File.open(filename, "w") { |file| file.puts struct.to_s }
+        rescue
+        end
 
-        File.open(filename, "w") { |file| file.puts struct.to_s }
-
-        puts postid
+        if not postid == true
+          puts postid
+        end
       end
 
       if @options.parsed.make_config_file

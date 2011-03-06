@@ -12,7 +12,7 @@ module Presser
     end
 
     def call_xmlrpc(opts)
-      puts "call_xmlrpc: opts = #{opts}"
+      # puts "call_xmlrpc: opts = #{opts}"
       server = XMLRPC::Client.new2(opts[:url])
       result = server.call(opts[:method], opts[:options])
     end
@@ -112,7 +112,7 @@ module Presser
       else
         # struct["postid"] = bp.postid
         options = { :url => @opt.url, :method => "metaWeblog.editPost", 
-                    :options => [bp.postid, @opt.username, @opt.password, struct, publish] }
+                    :options => [bp.postid.to_i, @opt.username, @opt.password, struct, publish] }
       end
       postid = call_xmlrpc options
       postid

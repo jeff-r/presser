@@ -1,5 +1,5 @@
 # Beginning of header
-title:  A new title
+title:  A newer title
 link:   http://wordpress/wp/?p=216
 postid: 216
 post_status: publish
@@ -8,3 +8,5 @@ This is the body
 of the file.
 
 This is [a link](http://www.google.com).
+
+And it works. Woo hoo!
