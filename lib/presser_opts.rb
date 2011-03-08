@@ -123,7 +123,7 @@ class PresserOpts
         end
       end
 
-      opts.on("-g", "--getpost INTEGER", "delete a post") do |postid|
+      opts.on("-g", "--getpost INTEGER", "get a post") do |postid|
         @parsed.get_post    = true
         @parsed.postid = postid
       end

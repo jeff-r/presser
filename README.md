@@ -25,3 +25,13 @@ Presser will upload a file for you. Use this command:
     presser -U filename
 
 Presser will upload the file and print out the url where the uploaded file can be found.
+
+## New posts
+
+Use the post_template.txt file as a template for new posts. Shocker.
+
+Copy the file and edit it. Then post it with:
+
+    presser -o filename
+
+Edit it some more. Update the post with the same command.
