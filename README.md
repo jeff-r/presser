@@ -20,18 +20,38 @@ will get presser to create a sample .presser file for you. You will then need to
 
 ## Uploading files
 
-Presser will upload a file for you. Use this command:
+This command doesn't post a file! It's here so you can upload an image that can then be shown on your blog. 
 
     presser -U filename
 
 Presser will upload the file and print out the url where the uploaded file can be found.
 
+## Edit a post
+
+Get the post ID of the post you want to edit. You can see this in Wordpress's url for the post, in several of the views. Then:
+
+    presser -g id
+
+This downloads the post to a file in your current directory that you can then edit. 
+
+To download a post and then open the file in Vim:
+
+    presser -vg id
+
+(Note! The order of the options is important. -vg works. -gv doesn't.)
+
 ## New posts
 
-Use the post_template.txt file as a template for new posts. Shocker.
+To create a new post template file in your current directory:
 
-Copy the file and edit it. Then post it with:
+    presser -n
+
+To create the new template and edit it in vim:
+
+    presser -nv
+
+At the moment, vim is hardwired to be MacVim, via MacVim's mvim wrapper script.
+
+Once you have edited a post file, either a new one or a downloaded one, upload it to your blog like this:
 
     presser -o filename
-
-Edit it some more. Update the post with the same command.
