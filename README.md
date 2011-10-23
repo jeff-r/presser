@@ -4,7 +4,11 @@ Presser is a command-line program to post and upload to a Wordpress blog.
 
 It's pretty raw, but it (barely) scratches my itch, so it might not get updated for a bit.
 
-To run it: either install it as a gem ("rake -T" to see the rake options to do that) and run "presser", or run the bin/presser script.
+To run it:
+
+ * Install it as a gem ("gem install presser"),
+ * Install it as a gem from this repository ("rake -T" in the repository's main directory to see the rake options to do that)
+ * Clone the repository and run its bin/presser script.
 
 The command "presser -h" will get you a list of options.
 
@@ -12,19 +16,23 @@ The command "presser -h" will get you a list of options.
 
 In order to talk to WordPress, presser needs to talk to your WordPress's xmlrpc.php file, and will need your username and password.
 
-You can provide those on the command line, or make a .presser file in your home directoru. Running:
+You can provide those on the command line, or make a .presser file in your home directory. Running:
 
     presser -c
 
 will get presser to create a sample .presser file for you. You will then need to edit it, but it's a simple file, and should be self-explanatory. The sample file will contain more options than presser will actually read. (Like I said, it's pretty raw.) But just set the username, password, and url, and either ignore or delete the rest.
 
-## Uploading files
+## New posts
 
-This command doesn't post a file! It's here so you can upload an image that can then be shown on your blog. 
+To create a new post template file in your current directory:
 
-    presser -U filename
+    presser -n
 
-Presser will upload the file and print out the url where the uploaded file can be found.
+To create the new template and edit it in vim:
+
+    presser -nv
+
+At the moment, vim is hardwired to be MacVim, via MacVim's mvim wrapper script.
 
 ## Edit a post
 
@@ -40,18 +48,17 @@ To download a post and then open the file in Vim:
 
 (Note! The order of the options is important. -vg works. -gv doesn't.)
 
-## New posts
-
-To create a new post template file in your current directory:
-
-    presser -n
-
-To create the new template and edit it in vim:
-
-    presser -nv
-
-At the moment, vim is hardwired to be MacVim, via MacVim's mvim wrapper script.
+## Pushing your new (or updated) post to WordPress
 
 Once you have edited a post file, either a new one or a downloaded one, upload it to your blog like this:
 
     presser -o filename
+
+## Uploading files
+
+This last command doesn't post a file! It's here so you can upload an image that can then be shown on your blog:
+
+    presser -U filename
+
+Presser will upload the file and print out the url where the uploaded file can be found.
+
