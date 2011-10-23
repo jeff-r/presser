@@ -89,12 +89,14 @@ class PresserOpts
     @parsed.post_file        ||= false
     @parsed.file_to_post     ||= ""
     @parsed.make_config_file ||= false
+    @parsed.make_new_post    ||= false
     @parsed.use_config_file  ||= true
     @parsed.config_file_name ||= "#{ENV['HOME']}/.presser"
     @parsed.delete_post      ||= false
     @parsed.get_post         ||= false
     @parsed.postid           ||= ""
     @parsed.show_config      ||= false
+    @parsed.use_vim          ||= false
 
     @optionParser = OptionParser.new do |opts|
       opts.banner = "Usage: presser [options]"
@@ -128,6 +130,11 @@ class PresserOpts
         @parsed.postid = postid
       end
 
+      opts.on("-n", "--new", "Make a new blank post file") do |postid|
+        @parsed.make_new_post = true
+        @parsed.postid = postid
+      end
+
       opts.on("-o", "--post STRING", "Post the named file") do |filename|
         @parsed.post_file    = true
         @parsed.file_to_post = filename.strip
@@ -137,24 +144,27 @@ class PresserOpts
         puts "PresserOpts: show config is true"
         @parsed.show_config = true
       end
-      
+
       opts.on('-p', '--password STRING', 'WordPress admin password') do |password|
         @parsed.password = password.strip
       end
+
       opts.on('-u', '--username STRING', 'WordPress admin username') do |username|
         @parsed.username = username.strip
       end
+
       opts.on('-U', '--upload STRING', 'Upload a file') do |filename|
         @parsed.upload_file    = true
         @parsed.file_to_upload = filename.strip
       end
+
       opts.on('-r STRING', '--url STRING', 'WordPress xmlrpc url') do |url|
         @parsed.url = url.strip
       end
 
-      # opts.on("-v", "--verbose", "Print out verbose messages") do |verb|
-      #   parsed.verbose = true
-      # end
+      opts.on('-v', '--vim', 'Open vim') do |url|
+        @parsed.use_vim = true
+      end
 
     end
 

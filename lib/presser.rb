@@ -1,7 +1,7 @@
-require_relative 'presser_opts'
+require 'presser_opts'
 require 'net/http'
 require 'xmlrpc/client'
-require_relative 'presser_xmlrpc'
+require 'presser_xmlrpc'
 require 'fileutils'
 
 module Presser
@@ -39,8 +39,10 @@ module Presser
     end
 
     def get_post postid
+      y @options.parsed
       rpc = PresserXmlrpc.new @options.parsed
       struct = rpc.get_post postid
+      filename = BlogPost.make_file_from_struct struct
     end
 
     def delete_post postid
@@ -58,6 +60,11 @@ module Presser
 
       if @options.parsed.upload_file
         puts rpc.upload_file @options.parsed.file_to_upload
+      end
+
+      if @options.parsed.get_post
+        filename = get_post @options.parsed.postid
+        run_vim filename
       end
 
       if @options.parsed.post_file
@@ -82,6 +89,12 @@ module Presser
         end
       end
 
+      if @options.parsed.make_new_post
+        bp = BlogPost.new
+        filename = bp.save_new_post
+        run_vim filename
+      end
+
       if @options.parsed.make_config_file
         puts @options.save_to_file
       end
@@ -95,6 +108,11 @@ module Presser
       end
     end
 
+    def run_vim filename
+      return unless @options.parsed.use_vim
+      puts "run vim with file: #{filename}"
+      system("mvim #{filename}")
+    end
   end
 end
 

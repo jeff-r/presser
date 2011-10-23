@@ -1,7 +1,7 @@
 # Beginning of header
 title:  A newer title
-link:   http://wordpress/wp/?p=216
-postid: 216
+link:   http://www.jeffroush.com/technotes/2011/10/23/a-newer-title/
+postid: 1247
 post_status: publish
 # End of header
 This is the body

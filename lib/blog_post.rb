@@ -18,6 +18,13 @@ module Presser
       bp
     end
 
+    def self.make_file_from_struct presserDoc
+      File.open(BlogPost.new_post_filename, "w") do |f|
+        f.puts presserDoc.to_s
+      end
+      BlogPost.new_post_filename
+    end
+
     def load_from_file filename
       parse_all_lines filename
       @title = @post_file_items["title"]     || ""
@@ -90,6 +97,27 @@ postid: #{@postid}
 post_status: #{@post_status}
 # End of header
 #{@body}}
+    end
+
+    def save_new_post
+      str = %Q{# Beginning of header
+title: #{@title}
+categories: #{@categories}
+# End of header
+
+}
+      # File.open(BlogPost.new_post_filename, "w") { |file| file.puts str }
+      f = File.open(BlogPost.new_post_filename, "w")
+      f.puts str
+      f.flush
+      f.close
+      BlogPost.new_post_filename
+    end
+
+    def self.new_post_filename
+      prefix = "presser_post_"
+      @numfiles ||= Dir.glob(prefix + "*").length
+      @new_file_name ||= prefix + (@numfiles + 1).to_s + ".md"
     end
 
     def save_to_file filename

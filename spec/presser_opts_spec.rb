@@ -1,6 +1,6 @@
 require 'presser'
 require 'presser_opts'
-require_relative 'dont_git_this'
+require 'dont_git_this'
 
 describe "Presser defaults" do
   before(:each) do

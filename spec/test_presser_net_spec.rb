@@ -1,6 +1,6 @@
 require 'presser'
 require 'presser_xmlrpc'
-require_relative 'dont_git_this'
+require 'dont_git_this'
 
 describe "Presser net access" do
   before(:each) do

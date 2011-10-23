@@ -1,6 +1,6 @@
 require 'xmlrpc/client'
-require_relative 'local_file'
-require_relative 'blog_post'
+require 'local_file'
+require 'blog_post'
 require 'presser_doc'
 
 module Presser
