@@ -39,7 +39,6 @@ module Presser
     end
 
     def get_post postid
-      y @options.parsed
       rpc = PresserXmlrpc.new @options.parsed
       struct = rpc.get_post postid
       filename = BlogPost.make_file_from_struct struct
