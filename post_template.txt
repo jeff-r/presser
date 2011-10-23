@@ -1,12 +1,9 @@
 # Beginning of header
 title:  A newer title
-link:   http://www.jeffroush.com/technotes/2011/10/23/a-newer-title/
-postid: 1247
-post_status: publish
+categories: these, are, tags
 # End of header
+
 This is the body
 of the file.
 
 This is [a link](http://www.google.com).
-
-And it works. Woo hoo!
